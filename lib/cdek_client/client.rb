@@ -20,6 +20,7 @@ module CdekClient
         result.set_data []
         return result
       end
+      result.data[:PvzList] = {} unless result.data[:PvzList].is_a?(Hash)
       if result.data[:PvzList].has_key? :ErrorCode
         error = CdekClient.get_api_error result.data[:PvzList][:ErrorCode], result.data[:PvzList][:Msg]
         result.add_error error
