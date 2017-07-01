@@ -93,6 +93,8 @@ module CdekClient
         end
       end
 
+      request_params = request_params.merge timeout: 5
+
       begin
         response = HTTParty.send method, url, request_params
         if response.code == 200
