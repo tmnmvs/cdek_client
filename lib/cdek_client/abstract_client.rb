@@ -12,7 +12,7 @@ module CdekClient
     protected
 
     def url_for(host_key, path_key)
-      URI.join("http://#{CdekClient::HOSTS[host_key][:host]}:#{CdekClient::HOSTS[host_key][:port]}", CdekClient::PATHS[path_key]).to_s
+      URI.join("#{host_key == :primary ? 'https' : 'http'}://#{CdekClient::HOSTS[host_key][:host]}:#{CdekClient::HOSTS[host_key][:port]}", CdekClient::PATHS[path_key]).to_s
     end
 
     def response_normalization_rules_for(key)
