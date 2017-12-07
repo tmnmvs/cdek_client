@@ -93,42 +93,42 @@ module CdekClient
         end
       end
 
-      request_params = request_params.merge timeout: 10
+      request_params = request_params.merge timeout: 30
 
-      puts 'CDEK CLIENT START REQUEST ***********************'
+      log = CustomLog.new('orders')
+
+      log.logger.send :debug, 'CDEK CLIENT START REQUEST ***********************'
 
       puts Time.now
       begin
         response = HTTParty.send method, url, request_params
         if response.code == 200
-          puts '1111111111111111111111111111111111111111111'
-          puts Time.now
+          log.logger.send :debug, '11111111111111111111111111111111'
           return CdekClient::Result.new response, response.body
         else
-          puts '2222222222222222222222222222222222222222'
-          puts Time.now
+          log.logger.send :debug, '22222222222222222222222222222222'
           raise CdekClient::ResponseError.new response.code, response.message
         end
       rescue CdekClient::ResponseError, HTTParty::ResponseError => e
         if Util.blank? retry_url
-          puts '33333333333333333333333333333333'
+          log.logger.send :debug, '33333333333333333333333333333333'
           error = e.is_a?(CdekClient::ResponseError) ? e : (CdekClient::ResponseError.new e.response.code, e.response.message)
           return CdekClient::Result.new response, response.body, [error]
         else
-          puts '444444444444444444444444444444444'
+          log.logger.send :debug, '4444444444444444444444444444444'
           return raw_request url, nil, method, request_params, nil
         end
       rescue Timeout::Error, Errno::ETIMEDOUT => e
         if Util.blank? retry_url
-          puts '555555555555555555555555555555'
+          log.logger.send :debug, '555555555555555555555555555555'
           return CdekClient::Result.new response, response.body, [e]
         else
-          puts '555555555555555555555555555555'
+          log.logger.send :debug, '555555555555555555555555555555'
           return raw_request url, nil, method, request_params, nil
         end
       end
 
-      puts 'CDEK CLIENT END REQUEST ***********************'
+      log.logger.send :debug, 'CDEK CLIENT END REQUEST ***********************'
     end
 
   end
