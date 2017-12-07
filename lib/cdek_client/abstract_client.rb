@@ -99,31 +99,30 @@ module CdekClient
 
       log.logger.send :debug, 'CDEK CLIENT START REQUEST ***********************'
 
-      puts Time.now
       begin
         response = HTTParty.send method, url, request_params
+        log.logger.send :debug, "FIRST request: #{request.code}"
         if response.code == 200
-          log.logger.send :debug, '11111111111111111111111111111111'
           return CdekClient::Result.new response, response.body
         else
-          log.logger.send :debug, '22222222222222222222222222222222'
           raise CdekClient::ResponseError.new response.code, response.message
         end
       rescue CdekClient::ResponseError, HTTParty::ResponseError => e
+        log.logger.send :debug, 'CdekClient::ResponseError || HTTParty::ResponseError'
         if Util.blank? retry_url
-          log.logger.send :debug, '33333333333333333333333333333333'
           error = e.is_a?(CdekClient::ResponseError) ? e : (CdekClient::ResponseError.new e.response.code, e.response.message)
+          log.logger.send :debug, error.inspect
           return CdekClient::Result.new response, response.body, [error]
         else
-          log.logger.send :debug, '4444444444444444444444444444444'
+          log.logger.send :debug, 'send new raw request...'
           return raw_request url, nil, method, request_params, nil
         end
       rescue Timeout::Error, Errno::ETIMEDOUT => e
+        log.logger.send :debug, 'Timeout::Error || Errno::ETIMEDOUT'
         if Util.blank? retry_url
-          log.logger.send :debug, '555555555555555555555555555555'
           return CdekClient::Result.new response, response.body, [e]
         else
-          log.logger.send :debug, '555555555555555555555555555555'
+          log.logger.send :debug, 'send new raw request...'
           return raw_request url, nil, method, request_params, nil
         end
       end
