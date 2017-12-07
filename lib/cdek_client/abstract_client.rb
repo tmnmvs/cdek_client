@@ -95,7 +95,7 @@ module CdekClient
 
       request_params = request_params.merge timeout: 30
 
-      log = CustomLog.new('orders')
+      log = CustomLog.new('cdek_client')
 
       log.logger.send :debug, 'CDEK CLIENT START REQUEST ***********************'
 
