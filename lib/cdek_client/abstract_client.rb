@@ -101,7 +101,7 @@ module CdekClient
 
       begin
         response = HTTParty.send method, url, request_params
-        log.logger.send :debug, "FIRST request: #{request.code}"
+        log.logger.send :debug, "FIRST request: #{response.code}"
         if response.code == 200
           return CdekClient::Result.new response, response.body
         else
