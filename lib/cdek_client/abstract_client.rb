@@ -97,6 +97,10 @@ module CdekClient
 
       log = CustomLog.new('cdek_client')
 
+      log.logger.send :debug, "URL: #{url.inspect}"
+      log.logger.send :debug, "params: #{request_params.inspect}"
+      log.logger.send :debug, "method: #{method.inspect}"
+
       log.logger.send :debug, 'CDEK CLIENT START REQUEST ***********************'
 
       begin
