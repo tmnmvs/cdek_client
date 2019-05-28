@@ -93,7 +93,7 @@ module CdekClient
         end
       end
 
-      request_params = request_params.merge timeout: 30
+      request_params = request_params.merge timeout: 50
 
       log = CustomLog.new('cdek_client')
 
